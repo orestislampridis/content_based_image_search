@@ -14,7 +14,9 @@ Jinja2==2.11.2
 kiwisolver==1.2.0
 MarkupSafe==1.1.1
 matplotlib==3.2.1
+mkl-service==2.3.0
 networkx==2.4
+numpy @ file:///D:/bld/numpy_1588605187257/work
 opencv-contrib-python==3.4.2.16
 opencv-python==3.4.2.16
 pandas==1.0.3

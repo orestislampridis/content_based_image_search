@@ -6,7 +6,7 @@ from ColorDescriptor import ColorDescriptor
 from Searcher import Searcher
 from ShapeDescriptor import ShapeDescriptor
 
-app = Flask(__name__, static_url_path="")
+app = Flask(__name__, static_url_path="/static")
 
 
 # main route
@@ -76,7 +76,7 @@ def search():
             jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
 
-@app.route('/static/<filename>')
+@app.route('/<path:filename>')
 def send_image(filename):
     print(filename)
     path = filename
