@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col"></div>
+        <div class="col">
+            <form action='search' method='POST' enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <h1>Select an Image</h1>
+                    <br>
+                    <div class='card'>
+                        <div class="left">
+                            <div class='form-field-input'>
+                                <input type='file' class='form-control-file' name='file_image' id='file_image'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <h2>Select method</h2>
+                    <div class="card">
+                        <div class="radioLeft">
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" name="method" value="color"
+                                       id="defaultCheck1"
+                                       checked="checked">
+                                <label class="custom-control-label" for="defaultCheck1">
+                                    Color Descriptor
+                                </label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" name="method" value="sift"
+                                       id="defaultCheck2">
+                                <label class="custom-control-label" for="defaultCheck2">
+                                    Scale-Invariant Feature Transform (SIFT)
+                                </label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" name="method" value="color"
+                                       id="defaultCheck3">
+                                <label class="custom-control-label" for="defaultCheck3">
+                                    Speeded Up Robust Features (SURF)
+                                </label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" name="method" value="color"
+                                       id="defaultCheck4">
+                                <label class="custom-control-label" for="defaultCheck4">
+                                    KAZE Features
+                                </label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" name="method" value="color"
+                                       id="defaultCheck5">
+                                <label class="custom-control-label" for="defaultCheck5">
+                                    Oriented FAST and rotated BRIEF (ORB)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h2>Select distance</h2>
+                    <label>
+                        <select class="form-control" name="distance">
+                            <option value="euclidean">Euclidean</option>
+                            <option value="canberra">Canberra</option>
+                            <option value="cosine">Cosine</option>
+                            <option value="jaccard">Jaccard</option>
+                            <option value="dice">Dice</option>
+                            <option value="chi_squared">Chi-squared</option>
+                            <option value="jensenshannon">Jensen–Shannon</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="slidecontainer">
+                    <h2>Select nearest neighbors</h2>
+                    <input type="range" min="1" max="20" value="5" class="custom-range" id="myRange" name="knn_slider">
+                    <p>Value: <span id="demo"></span></p>
+                </div>
+                <br>
+
+                <div class="form-button-submit">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="col"></div>
+    </div>
+
+{% endblock %}
