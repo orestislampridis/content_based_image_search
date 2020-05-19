@@ -1,5 +1,4 @@
 import os
-import urllib.parse as urlparse
 
 from flask import Flask, render_template, request, jsonify, send_from_directory
 
@@ -9,7 +8,7 @@ from ShapeDescriptor import ShapeDescriptor
 
 app = Flask(__name__)
 
-db_URL = urlparse.urlparse(os.environ['DATABASE_URL'])
+db_URL = os.environ['DATABASE_URL']
 
 
 # main route
