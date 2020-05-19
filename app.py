@@ -1,4 +1,5 @@
 import os
+import urllib.parse as urlparse
 
 from flask import Flask, render_template, request, jsonify, send_from_directory
 
@@ -7,6 +8,8 @@ from Searcher import Searcher
 from ShapeDescriptor import ShapeDescriptor
 
 app = Flask(__name__)
+
+db_URL = urlparse.urlparse(os.environ['DATABASE_URL'])
 
 
 # main route
@@ -43,15 +46,18 @@ def search():
 
             if method == "color":
                 color_features = cd.describe(img)
-                searcher = Searcher(color_features, method=method, distance=distance, limit=int(number_of_neighbors))
+                searcher = Searcher(color_features, method=method, distance=distance, limit=int(number_of_neighbors),
+                                    database_url=db_URL)
                 results = searcher.search()
             else:
                 kaze_features, orb_features = sd.describe(img)
                 if method == "kaze":
-                    searcher = Searcher(kaze_features, method, distance, limit=int(number_of_neighbors))
+                    searcher = Searcher(kaze_features, method, distance, limit=int(number_of_neighbors),
+                                        database_url=db_URL)
                     results = searcher.search()
                 if method == "orb":
-                    searcher = Searcher(orb_features, method, distance, limit=int(number_of_neighbors))
+                    searcher = Searcher(orb_features, method, distance, limit=int(number_of_neighbors),
+                                        database_url=db_URL)
                     results = searcher.search()
 
             # loop over the results, displaying the score and image name
