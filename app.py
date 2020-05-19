@@ -15,7 +15,7 @@ def index():
     return render_template('index.html')
 
 
-db_URL = str(os.environ.get('DATABASE_URL'))
+db_URL = os.environ.get('DATABASE_URL')
 
 
 # search route

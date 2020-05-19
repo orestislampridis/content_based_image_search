@@ -68,9 +68,9 @@ class Searcher:
         self.distance = distance
         self.limit = limit
         self.database_url = database_url
-        
+
         try:
-            cn = pq.connect(self.database_url, sslmode='require')
+            cn = pq.connect(self.database_url)
         except (Exception, pq.Error) as error:
             print("Error while connecting to PostgreSQL", error)
 
