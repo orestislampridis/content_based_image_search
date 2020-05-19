@@ -46,13 +46,7 @@ def search():
                 searcher = Searcher(color_features, method=method, distance=distance, limit=int(number_of_neighbors))
                 results = searcher.search()
             else:
-                sift_features, surf_features, kaze_features, orb_features = sd.describe(img)
-                if method == "sift":
-                    searcher = Searcher(sift_features, method, distance, limit=int(number_of_neighbors))
-                    results = searcher.search()
-                if method == "surf":
-                    searcher = Searcher(surf_features, method, distance, limit=int(number_of_neighbors))
-                    results = searcher.search()
+                kaze_features, orb_features = sd.describe(img)
                 if method == "kaze":
                     searcher = Searcher(kaze_features, method, distance, limit=int(number_of_neighbors))
                     results = searcher.search()

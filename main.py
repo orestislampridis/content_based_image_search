@@ -73,13 +73,13 @@ def main(argv):
             # describe the image by using our descriptors
             try:
                 color_features = cd.describe(image)
-                sift_features, surf_features, kaze_features, orb_features = sd.describe(image)
+                kaze_features, orb_features = sd.describe(image)
             except ValueError:
                 continue
 
-            cursor.execute("INSERT INTO files(id, orig_filename, color_descriptor, sift, surf, kaze, orb)"
-                           "VALUES (DEFAULT,%s,%s,%s,%s,%s,%s) RETURNING id",
-                           (fname, color_features, sift_features, surf_features, kaze_features, orb_features))
+            cursor.execute("INSERT INTO files(id, orig_filename, color_descriptor, kaze, orb)"
+                           "VALUES (DEFAULT,%s,%s,%s,%s) RETURNING id",
+                           (fname, color_features, kaze_features, orb_features))
 
             returned_id = cursor.fetchone()[0]
             f.close()
@@ -98,7 +98,7 @@ def main(argv):
         distance = 'euclidean'
 
         color_features = cd.describe(image)
-        sift_features, surf_features, kaze_features, orb_features = sd.describe(image)
+        kaze_features, orb_features = sd.describe(image)
 
         searcher = Searcher(color_features, method, distance, limit=10)
 
