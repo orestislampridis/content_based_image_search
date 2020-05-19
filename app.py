@@ -105,7 +105,7 @@ def search():
             jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
 
-@app.route('/static/<filename>')
+@app.route('/<filename>')
 def send_image(filename):
     print(filename)
     path = filename
@@ -113,7 +113,7 @@ def send_image(filename):
     relative_path = os.path.relpath(path, start)
     print(relative_path)
     # return send_from_directory("/static/image", relative_path)
-    return filename
+    return relative_path
 
 
 if __name__ == "__main__":
