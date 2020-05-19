@@ -10,10 +10,7 @@ from ShapeDescriptor import ShapeDescriptor
 
 app = Flask(__name__, static_url_path='/static')
 
-db_URL = 'postgres://lwonnzirfqjlrj:239cab6b982fbb869cbb8ca219e068622bbe0c3bb05da6c06af5837659e6bcec@ec2-46-137-177-160.eu-west-1.compute.amazonaws.com:5432/d9a5legl875uce'
-
-
-# db_URL = os.environ.get('DATABASE_URL')
+db_URL = os.environ.get('DATABASE_URL')
 
 
 # main route
