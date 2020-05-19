@@ -110,7 +110,7 @@ def send_image(filename):
     start = "images/"
     relative_path = os.path.relpath(path, start)
     print(relative_path)
-    return send_from_directory("/static", relative_path)
+    return send_from_directory("/static", filename)
 
 
 if __name__ == "__main__":
