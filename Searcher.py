@@ -1,5 +1,4 @@
 # import the necessary packages
-import urllib.parse as urlparse
 
 import numpy as np
 import pandas.io.sql as sqlio
@@ -70,7 +69,7 @@ class Searcher:
         self.limit = limit
         self.database_url = database_url
 
-        url = urlparse.urlparse(self.database_url)
+        url = self.database_url
         dbname = url.path[1:]
         user = url.username
         password = url.password
