@@ -105,16 +105,6 @@ def main(argv):
         # Perform the search using the current query
         results = searcher.search()
 
-        # load the query image and display it
-        cv2.imshow("Query", image)
-
-        # loop over the results
-        for (score, resultID) in results:
-            # load the result image and display it
-            result = cv2.imread(resultID)
-            cv2.imshow("Result", result)
-            cv2.waitKey(0)
-
     connection.close()
 
 
