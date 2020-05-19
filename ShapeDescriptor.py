@@ -42,8 +42,8 @@ class ShapeDescriptor:
             kaze_descriptors = kaze_descriptors.flatten()
             orb_descriptors = orb_descriptors.flatten()
 
-            # Making descriptor of same vector size 64
-            needed_size = (self.vector_size * 64)
+            # Making descriptor of same vector size 32
+            needed_size = (self.vector_size * 32)
 
             # If we have less the 32 descriptors then pad with zeroes
             if sift_descriptors.size < needed_size or surf_descriptors.size < needed_size or \

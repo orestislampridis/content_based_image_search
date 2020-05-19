@@ -22,7 +22,7 @@ def main(argv):
     args = parser.parse_args(argv[1:])
 
     # Initialize the color descriptor
-    cd = ColorDescriptor((8, 8, 8))
+    cd = ColorDescriptor((8, 12, 3))
 
     # Initialize the shape descriptors
     sd = ShapeDescriptor(32)
@@ -71,13 +71,15 @@ def main(argv):
             image = cv2.imread(fname)
 
             # describe the image by using our descriptors
-            color_features = cd.describe(image)
-            sift_features, surf_features, kaze_features, orb_features = sd.describe(image)
+            try:
+                color_features = cd.describe(image)
+                sift_features, surf_features, kaze_features, orb_features = sd.describe(image)
+            except ValueError:
+                continue
 
             cursor.execute("INSERT INTO files(id, orig_filename, color_descriptor, sift, surf, kaze, orb)"
                            "VALUES (DEFAULT,%s,%s,%s,%s,%s,%s) RETURNING id",
-                           (fname, color_features, sift_features, surf_features, kaze_features,
-                            orb_features))
+                           (fname, color_features, sift_features, surf_features, kaze_features, orb_features))
 
             returned_id = cursor.fetchone()[0]
             f.close()

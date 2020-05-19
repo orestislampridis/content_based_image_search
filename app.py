@@ -6,7 +6,7 @@ from ColorDescriptor import ColorDescriptor
 from Searcher import Searcher
 from ShapeDescriptor import ShapeDescriptor
 
-app = Flask(__name__, static_url_path="/static")
+app = Flask(__name__)
 
 
 # main route
@@ -30,25 +30,23 @@ def search():
 
         try:
             # initialize the image and shape descriptors
-            cd = ColorDescriptor((8, 8, 8))
+            cd = ColorDescriptor((8, 12, 3))
             sd = ShapeDescriptor(32)
 
             # load the query image and describe it
             from skimage import io
             import cv2
-            query = io.imread(image_url)
-            query = (query * 255).astype("uint8")
-            # (r, g, b) = cv2.split(query)
-            # query = cv2.merge([b, g, r])
+            img = io.imread(image_url)
+            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
 
             results = list()
 
             if method == "color":
-                color_features = cd.describe(query)
+                color_features = cd.describe(img)
                 searcher = Searcher(color_features, method=method, distance=distance, limit=int(number_of_neighbors))
                 results = searcher.search()
             else:
-                sift_features, surf_features, kaze_features, orb_features = sd.describe(query)
+                sift_features, surf_features, kaze_features, orb_features = sd.describe(img)
                 if method == "sift":
                     searcher = Searcher(sift_features, method, distance, limit=int(number_of_neighbors))
                     results = searcher.search()
@@ -76,11 +74,11 @@ def search():
             jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
 
-@app.route('/<path:filename>')
+@app.route('/<filename>')
 def send_image(filename):
     print(filename)
     path = filename
-    start = "static/"
+    start = "images/"
     relative_path = os.path.relpath(path, start)
     print(relative_path)
     return send_from_directory("images", relative_path)

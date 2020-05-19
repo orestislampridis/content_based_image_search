@@ -9,7 +9,7 @@ def get_euclidean_distance(vectorA, vectorB):
     # Compute jaccard similarity and then jaccard distance
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
-    distance = 1 - cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='euclidean').ravel()
+    distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='euclidean').ravel()
     return distance
 
 
@@ -17,7 +17,7 @@ def get_canberra_distance(vectorA, vectorB):
     # Compute jaccard similarity and then jaccard distance
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
-    distance = 1 - cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='canberra').ravel()
+    distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='canberra').ravel()
     return distance
 
 
@@ -25,7 +25,7 @@ def get_cosine_distance(vectorA, vectorB):
     # Compute jaccard similarity and then jaccard distance
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
-    distance = 1 - cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='cosine').ravel()
+    distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='cosine').ravel()
     return distance
 
 
@@ -33,7 +33,7 @@ def get_jaccard_distance(vectorA, vectorB):
     # Compute jaccard similarity and then jaccard distance
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
-    distance = 1 - cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='jaccard').ravel()
+    distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='jaccard').ravel()
     return distance
 
 
@@ -41,23 +41,21 @@ def get_dice_distance(vectorA, vectorB):
     # Compute jaccard similarity and then jaccard distance
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
-    distance = 1 - cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='dice').ravel()
+    distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='dice').ravel()
     return distance
 
 
 def get_chi2_distance(vectorA, vectorB, eps=1e-10):
     # compute the chi-squared distance
-    d = 0.5 * np.sum([((a - b) ** 2) / (a + b + eps)
-                      for (a, b) in zip(vectorA, vectorB)])
-    # return the chi-squared distance
-    return d
+    distance = 0.5 * np.sum([((a - b) ** 2) / (a + b + eps) for (a, b) in zip(vectorA, vectorB)])
+    return distance
 
 
 def get_jensenshannon_distance(vectorA, vectorB):
     # Compute jaccard similarity and then jaccard distance
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
-    distance = 1 - cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='jensenshannon').ravel()
+    distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='jensenshannon').ravel()
     return distance
 
 
@@ -143,4 +141,5 @@ class Searcher:
         results = sorted([(v, k) for (k, v) in results.items()])
 
         # return our results
+        print(results)
         return results[:self.limit]
