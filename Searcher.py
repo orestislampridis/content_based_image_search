@@ -76,15 +76,15 @@ class Searcher:
         id_list = df["orig_filename"].tolist()
 
         if self.method == "color":
-            vector_list = df["color_descriptor"].tolist()
+            vector_list = df["color_descriptor"].sample(n=100, random_state=42).tolist()
         elif self.method == "sift":
-            vector_list = df["sift"].tolist()
+            vector_list = df["sift"].sample(n=100, random_state=42).tolist()
         elif self.method == "surf":
-            vector_list = df["surf"].tolist()
+            vector_list = df["surf"].sample(n=100, random_state=42).tolist()
         elif self.method == "kaze":
-            vector_list = df["kaze"].tolist()
+            vector_list = df["kaze"].sample(n=100, random_state=42).tolist()
         elif self.method == "orb":
-            vector_list = df["orb"].tolist()
+            vector_list = df["orb"].sample(n=100, random_state=42).tolist()
 
         vector_list_cleaned = [list(float(item) for item in t) for t in vector_list]
         dictionary = dict(zip(id_list, vector_list_cleaned))

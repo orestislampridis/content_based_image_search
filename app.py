@@ -20,6 +20,16 @@ def index():
 # db_URL = 'postgres://lwonnzirfqjlrj:239cab6b982fbb869cbb8ca219e068622bbe0c3bb05da6c06af5837659e6bcec@ec2-46-137-177-160.eu-west-1.compute.amazonaws.com:5432/d9a5legl875uce'
 
 db_URL = os.environ.get('DATABASE_URL')
+try:
+    cn = pq.connect(db_URL)
+except (Exception, pq.Error) as error:
+    print("Error while connecting to PostgreSQL", error)
+
+cr = cn.cursor()
+sql = 'SELECT * FROM files;'
+cr.execute(sql)
+tmp = cr.fetchall()
+df = sqlio.read_sql_query(sql, cn)
 
 
 # search route
@@ -37,8 +47,6 @@ def search():
 
         try:
             # initialize the image and shape descriptors
-            cd = ColorDescriptor((8, 12, 3))
-            sd = ShapeDescriptor(32)
 
             # load the query image and describe it
             from skimage import io
@@ -47,23 +55,15 @@ def search():
             img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
 
             results = list()
-            try:
-                cn = pq.connect(db_URL)
-            except (Exception, pq.Error) as error:
-                print("Error while connecting to PostgreSQL", error)
-
-            cr = cn.cursor()
-            sql = 'SELECT * FROM files;'
-            cr.execute(sql)
-            tmp = cr.fetchall()
-            df = sqlio.read_sql_query(sql, cn)
 
             if method == "color":
+                cd = ColorDescriptor((8, 12, 3))
                 color_features = cd.describe(img)
                 searcher = Searcher(color_features, method=method, distance=distance, limit=int(number_of_neighbors),
                                     dataframe=df)
                 results = searcher.search()
             else:
+                sd = ShapeDescriptor(32)
                 kaze_features, orb_features = sd.describe(img)
                 if method == "kaze":
                     searcher = Searcher(kaze_features, method, distance, limit=int(number_of_neighbors),
