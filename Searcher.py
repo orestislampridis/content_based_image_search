@@ -1,8 +1,6 @@
 # import the necessary packages
 
 import numpy as np
-import pandas.io.sql as sqlio
-import psycopg2 as pq
 from scipy.spatial.distance import cdist
 
 
@@ -61,25 +59,13 @@ def get_jensenshannon_distance(vectorA, vectorB):
 
 
 class Searcher:
-    def __init__(self, query_features, method, distance, limit, database_url):
+    def __init__(self, query_features, method, distance, limit, dataframe):
         # store the index of images
         self.query_features = query_features
         self.method = method
         self.distance = distance
         self.limit = limit
-        self.database_url = database_url
-
-        try:
-            cn = pq.connect(self.database_url)
-        except (Exception, pq.Error) as error:
-            print("Error while connecting to PostgreSQL", error)
-
-        cr = cn.cursor()
-        sql = 'SELECT * FROM files;'
-        cr.execute(sql)
-        tmp = cr.fetchall()
-
-        self.df = sqlio.read_sql_query(sql, cn)
+        self.df = dataframe
 
     def search(self):
         # initialize our dictionary of results

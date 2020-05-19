@@ -1,5 +1,7 @@
 import os
 
+import pandas.io.sql as sqlio
+import psycopg2 as pq
 from flask import Flask, render_template, request, jsonify, send_from_directory
 
 from ColorDescriptor import ColorDescriptor
@@ -15,10 +17,9 @@ def index():
     return render_template('index.html')
 
 
-db_URL = 'postgres://lwonnzirfqjlrj:239cab6b982fbb869cbb8ca219e068622bbe0c3bb05da6c06af5837659e6bcec@ec2-46-137-177-160.eu-west-1.compute.amazonaws.com:5432/d9a5legl875uce'
+# db_URL = 'postgres://lwonnzirfqjlrj:239cab6b982fbb869cbb8ca219e068622bbe0c3bb05da6c06af5837659e6bcec@ec2-46-137-177-160.eu-west-1.compute.amazonaws.com:5432/d9a5legl875uce'
 
-
-# db_URL = os.environ.get('DATABASE_URL')
+db_URL = os.environ.get('DATABASE_URL')
 
 
 # search route
@@ -46,21 +47,31 @@ def search():
             img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
 
             results = list()
+            try:
+                cn = pq.connect(db_URL)
+            except (Exception, pq.Error) as error:
+                print("Error while connecting to PostgreSQL", error)
+
+            cr = cn.cursor()
+            sql = 'SELECT * FROM files;'
+            cr.execute(sql)
+            tmp = cr.fetchall()
+            df = sqlio.read_sql_query(sql, cn)
 
             if method == "color":
                 color_features = cd.describe(img)
                 searcher = Searcher(color_features, method=method, distance=distance, limit=int(number_of_neighbors),
-                                    database_url=db_URL)
+                                    dataframe=df)
                 results = searcher.search()
             else:
                 kaze_features, orb_features = sd.describe(img)
                 if method == "kaze":
                     searcher = Searcher(kaze_features, method, distance, limit=int(number_of_neighbors),
-                                        database_url=db_URL)
+                                        dataframe=df)
                     results = searcher.search()
                 if method == "orb":
                     searcher = Searcher(orb_features, method, distance, limit=int(number_of_neighbors),
-                                        database_url=db_URL)
+                                        dataframe=df)
                     results = searcher.search()
 
             # loop over the results, displaying the score and image name
