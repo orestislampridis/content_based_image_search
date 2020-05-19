@@ -1,7 +1,5 @@
 # import the necessary packages
 
-import urllib.parse as urlparse
-
 import numpy as np
 import pandas.io.sql as sqlio
 import psycopg2 as pq
@@ -70,23 +68,9 @@ class Searcher:
         self.distance = distance
         self.limit = limit
         self.database_url = database_url
-
-        url = urlparse.urlparse(self.database_url)
-        dbname = url.path[1:]
-        user = url.username
-        password = url.password
-        host = url.hostname
-        port = url.port
-
+        
         try:
-            cn = pq.connect(
-                dbname=dbname,
-                user=user,
-                password=password,
-                host=host,
-                port=port
-            )
-
+            cn = pq.connect(self.database_url, sslmode='require')
         except (Exception, pq.Error) as error:
             print("Error while connecting to PostgreSQL", error)
 
