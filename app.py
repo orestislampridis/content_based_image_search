@@ -2,13 +2,13 @@ import os
 
 import pandas.io.sql as sqlio
 import psycopg2 as pq
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify
 
 from ColorDescriptor import ColorDescriptor
 from Searcher import Searcher
 from ShapeDescriptor import ShapeDescriptor
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='static')
 
 # db_URL = 'postgres://lwonnzirfqjlrj:239cab6b982fbb869cbb8ca219e068622bbe0c3bb05da6c06af5837659e6bcec@ec2-46-137-177-160.eu-west-1.compute.amazonaws.com:5432/d9a5legl875uce'
 db_URL = os.environ.get('DATABASE_URL')
@@ -103,15 +103,15 @@ def search():
             jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
 
-@app.route('/<filename>')
+@app.route('/static/<filename>')
 def send_image(filename):
     print(filename)
     path = filename
     start = "images/"
     relative_path = os.path.relpath(path, start)
     print(relative_path)
-    return send_from_directory("/static/image", relative_path)
-
+    # return send_from_directory("/static/image", relative_path)
+    return filename
 
 if __name__ == "__main__":
     app.run(debug=True)
