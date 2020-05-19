@@ -10,26 +10,12 @@ from ShapeDescriptor import ShapeDescriptor
 
 app = Flask(__name__)
 
+db_URL = os.environ.get('DATABASE_URL')
 
 # main route
 @app.route('/')
 def index():
     return render_template('index.html')
-
-
-# db_URL = 'postgres://lwonnzirfqjlrj:239cab6b982fbb869cbb8ca219e068622bbe0c3bb05da6c06af5837659e6bcec@ec2-46-137-177-160.eu-west-1.compute.amazonaws.com:5432/d9a5legl875uce'
-
-db_URL = os.environ.get('DATABASE_URL')
-try:
-    cn = pq.connect(db_URL)
-except (Exception, pq.Error) as error:
-    print("Error while connecting to PostgreSQL", error)
-
-cr = cn.cursor()
-sql = 'SELECT * FROM files;'
-cr.execute(sql)
-tmp = cr.fetchall()
-df = sqlio.read_sql_query(sql, cn)
 
 
 # search route
@@ -53,6 +39,17 @@ def search():
             import cv2
             img = io.imread(image_url)
             img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+            try:
+                cn = pq.connect(db_URL)
+            except (Exception, pq.Error) as error:
+                print("Error while connecting to PostgreSQL", error)
+
+            cr = cn.cursor()
+            sql = 'SELECT * FROM files;'
+            cr.execute(sql)
+            tmp = cr.fetchall()
+            df = sqlio.read_sql_query(sql, cn)
 
             results = list()
 
