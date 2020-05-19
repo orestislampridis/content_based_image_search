@@ -119,5 +119,4 @@ class Searcher:
         results = sorted([(v, k) for (k, v) in results.items()])
 
         # return our results
-        print(results)
         return results[:self.limit]
