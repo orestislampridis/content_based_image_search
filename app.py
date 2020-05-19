@@ -8,8 +8,6 @@ from ShapeDescriptor import ShapeDescriptor
 
 app = Flask(__name__)
 
-db_URL = os.environ['DATABASE_URL']
-
 
 # main route
 @app.route('/')
@@ -25,6 +23,7 @@ def search():
         image_names = []
 
         # get url
+        db_URL = os.environ['DATABASE_URL']
         image_url = request.files['file_image']
         method = request.form.get('method')
         distance = request.form.get('distance')
