@@ -9,12 +9,11 @@
 
     <div class="row text-center text-lg-left">
         {% for image_name in image_names %}
-
-            {{ image_name }}
-
             <div class="col-lg-3 col-md-4 col-6">
                 <a class="d-block mb-4 h-100">
-                    <img class="img-fluid img-thumbnail" src=" {{ url_for('send_image', filename=image_name) }}" alt="">
+                    <img class="img-fluid img-thumbnail"
+                         src=https://content-based-image-search.herokuapp.com/static/"{{ image_name }}"
+                         alt="">
                 </a>
             </div>
         {% endfor %}
