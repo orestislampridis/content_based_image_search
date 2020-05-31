@@ -1,8 +1,10 @@
 import os
 
+import cv2
 import pandas.io.sql as sqlio
 import psycopg2 as pq
 from flask import Flask, render_template, request, jsonify
+from skimage import io
 
 from ColorDescriptor import ColorDescriptor
 from Searcher import Searcher
@@ -17,6 +19,7 @@ db_URL = os.environ.get('DATABASE_URL')
 @app.route('/')
 def index():
     global cn
+    cr = 2
     try:
         cn = pq.connect(db_URL)
     except (Exception, pq.Error) as error:
@@ -39,11 +42,7 @@ def search():
         number_of_neighbors = request.form.get('knn_slider')
 
         try:
-            # initialize the image and shape descriptors
-
             # load the query image and describe it
-            from skimage import io
-            import cv2
             img = io.imread(image_url)
             img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
 

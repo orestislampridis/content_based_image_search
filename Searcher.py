@@ -5,7 +5,7 @@ from scipy.spatial.distance import cdist
 
 
 def get_euclidean_distance(vectorA, vectorB):
-    # Compute jaccard similarity and then jaccard distance
+    # Compute euclidean distance
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
     distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='euclidean').ravel()
@@ -13,7 +13,7 @@ def get_euclidean_distance(vectorA, vectorB):
 
 
 def get_canberra_distance(vectorA, vectorB):
-    # Compute jaccard similarity and then jaccard distance
+    # Compute canberra distance
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
     distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='canberra').ravel()
@@ -21,7 +21,7 @@ def get_canberra_distance(vectorA, vectorB):
 
 
 def get_cosine_distance(vectorA, vectorB):
-    # Compute jaccard similarity and then jaccard distance
+    # Compute cosine distance
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
     distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='cosine').ravel()
@@ -29,7 +29,7 @@ def get_cosine_distance(vectorA, vectorB):
 
 
 def get_jaccard_distance(vectorA, vectorB):
-    # Compute jaccard similarity and then jaccard distance
+    # Compute jaccard distance
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
     distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='jaccard').ravel()
@@ -37,7 +37,7 @@ def get_jaccard_distance(vectorA, vectorB):
 
 
 def get_dice_distance(vectorA, vectorB):
-    # Compute jaccard similarity and then jaccard distance
+    # Compute dice distance
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
     distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='dice').ravel()
@@ -51,7 +51,7 @@ def get_chi2_distance(vectorA, vectorB, eps=1e-10):
 
 
 def get_jensenshannon_distance(vectorA, vectorB):
-    # Compute jaccard similarity and then jaccard distance
+    # Compute jensen-shannon distance
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
     distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='jensenshannon').ravel()
