@@ -9,6 +9,7 @@ def get_euclidean_distance(vectorA, vectorB):
     vectorA = np.array(vectorA)
     vectorB = np.array(vectorB)
     distance = cdist(vectorA.reshape(1, -1), vectorB.reshape(1, -1), metric='euclidean').ravel()
+
     return distance
 
 
@@ -85,34 +86,34 @@ class Searcher:
         vector_list_cleaned = [list(float(item) for item in t) for t in vector_list]
         dictionary = dict(zip(id_list, vector_list_cleaned))
 
-        if self.distance == "euclidean":
-            for (k, features) in dictionary.items():
-                d = get_euclidean_distance(features, self.query_features)
-                results[k] = d
-        elif self.distance == "canberra":
-            for (k, features) in dictionary.items():
-                d = get_canberra_distance(features, self.query_features)
-                results[k] = d
-        elif self.distance == "cosine":
-            for (k, features) in dictionary.items():
-                d = get_cosine_distance(features, self.query_features)
-                results[k] = d
-        elif self.distance == "jaccard":
-            for (k, features) in dictionary.items():
-                d = get_jaccard_distance(features, self.query_features)
-                results[k] = d
-        elif self.distance == "dice":
-            for (k, features) in dictionary.items():
-                d = get_dice_distance(features, self.query_features)
-                results[k] = d
-        elif self.distance == "chi_squared":
-            for (k, features) in dictionary.items():
-                d = get_chi2_distance(features, self.query_features)
-                results[k] = d
-        elif self.distance == "jensenshannon":
-            for (k, features) in dictionary.items():
-                d = get_jensenshannon_distance(features, self.query_features)
-                results[k] = d
+        for (k, features) in dictionary.items():
+            try:
+                if self.distance == "euclidean":
+                    d = get_euclidean_distance(features, self.query_features)
+                    results[k] = d
+                elif self.distance == "canberra":
+                    d = get_canberra_distance(features, self.query_features)
+                    results[k] = d
+                elif self.distance == "cosine":
+                    d = get_cosine_distance(features, self.query_features)
+                    results[k] = d
+                elif self.distance == "jaccard":
+                    d = get_jaccard_distance(features, self.query_features)
+                    results[k] = d
+                elif self.distance == "dice":
+                    d = get_dice_distance(features, self.query_features)
+                    results[k] = d
+                elif self.distance == "chi_squared":
+                    d = get_chi2_distance(features, self.query_features)
+                    results[k] = d
+                elif self.distance == "jensenshannon":
+                    d = get_jensenshannon_distance(features, self.query_features)
+                    results[k] = d
+
+            # In the case that for some reason the features don't match
+            except ValueError:
+                results[k] = 100000000000000000
+                continue
 
         # sort our results, so that the smaller distances (i.e. the
         # more relevant images are at the front of the list)

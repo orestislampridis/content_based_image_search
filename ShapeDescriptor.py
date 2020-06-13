@@ -16,7 +16,7 @@ class ShapeDescriptor:
             kaze = cv2.KAZE_create()
             orb = cv2.ORB_create()
 
-            # Finde image keypoints
+            # Find the image keypoints
             # sift_keypoints = sift.detect(image)
             #surf_keypoints = surf.detect(image)
             kaze_keypoints = kaze.detect(image)
@@ -38,7 +38,7 @@ class ShapeDescriptor:
 
             # Flatten all of them in one big vector - our feature vector
             # sift_descriptors = sift_descriptors.flatten()
-            #surf_descriptors = surf_descriptors.flatten()
+            # surf_descriptors = surf_descriptors.flatten()
             kaze_descriptors = kaze_descriptors.flatten()
             orb_descriptors = orb_descriptors.flatten()
 
@@ -46,8 +46,10 @@ class ShapeDescriptor:
             needed_size = (self.vector_size * 32)
 
             # If we have less the 32 descriptors then pad with zeroes
-            if kaze_descriptors.size < needed_size or orb_descriptors.size < needed_size:
+            if kaze_descriptors.size < needed_size:
                 kaze_descriptors = np.concatenate([kaze_descriptors, np.zeros(needed_size - kaze_descriptors.size)])
+
+            if orb_descriptors.size < needed_size:
                 orb_descriptors = np.concatenate([orb_descriptors, np.zeros(needed_size - orb_descriptors.size)])
 
         except cv2.error as e:

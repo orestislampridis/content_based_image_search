@@ -3,6 +3,7 @@ import glob
 import sys
 
 import cv2
+import pandas.io.sql as sqlio
 import psycopg2 as pq
 
 from ColorDescriptor import ColorDescriptor
@@ -11,6 +12,7 @@ from ShapeDescriptor import ShapeDescriptor
 
 
 def main(argv):
+    global results
     parser = argparse.ArgumentParser()
     parser_action = parser.add_mutually_exclusive_group(required=True)
     parser_action.add_argument("--store", action='store_const', const=True,
@@ -94,16 +96,66 @@ def main(argv):
         image = cv2.imread(args.filename)
 
         # Initialize the searcher
-        method = 'color'
+        method = 'kaze'
         distance = 'euclidean'
 
-        color_features = cd.describe(image)
-        kaze_features, orb_features = sd.describe(image)
+        # Number of nearest neighbors
+        limit = 10
 
-        searcher = Searcher(color_features, method, distance, limit=10)
+        if method == "color":
+            cr = connection.cursor()
+            sql = 'SELECT orig_filename, color_descriptor FROM files;'
+            cr.execute(sql)
+            tmp = cr.fetchall()
+            df = sqlio.read_sql_query(sql, connection)
+            # sampled_df = df.sample(n=100, random_state=42)
 
-        # Perform the search using the current query
-        results = searcher.search()
+            color_features = cd.describe(image)
+            searcher = Searcher(color_features, method=method, distance=distance, limit=limit,
+                                dataframe=df)
+            results = searcher.search()
+        else:
+
+            if method == "kaze":
+                nsd = ShapeDescriptor(64)
+                kaze_features, _ = nsd.describe(image)
+
+                cr = connection.cursor()
+                sql = 'SELECT orig_filename, kaze FROM files;'
+                cr.execute(sql)
+                tmp = cr.fetchall()
+                df = sqlio.read_sql_query(sql, connection)
+                # sampled_df = df.sample(n=100, random_state=42)
+
+                searcher = Searcher(kaze_features, method, distance, limit=limit,
+                                    dataframe=df)
+                results = searcher.search()
+            if method == "orb":
+                nsd = ShapeDescriptor(128)
+                _, orb_features = nsd.describe(image)
+
+                cr = connection.cursor()
+                sql = 'SELECT orig_filename, orb FROM files;'
+                cr.execute(sql)
+                tmp = cr.fetchall()
+                df = sqlio.read_sql_query(sql, connection)
+
+                searcher = Searcher(orb_features, method, distance, limit=limit,
+                                    dataframe=df)
+                results = searcher.search()
+
+        # Print the results in console
+        print(results)
+
+        # Load the query image and display it
+        cv2.imshow("Query", image)
+
+        # Loop over the results
+        for (score, resultID) in results:
+            # Load the result image and display it
+            result = cv2.imread("static/" + resultID)
+            cv2.imshow("Result", result)
+            cv2.waitKey(0)
 
     connection.close()
 
